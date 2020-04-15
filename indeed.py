@@ -25,7 +25,15 @@ def get_last_page():
 
 def extract_job(html):
   # Find Title
-  title = html.find("div", {"class": "title"}).find("a")["title"]
+  title = html.find("h2", {"class": "title"})
+  if title:
+    title_anchor = title.find("a")
+    if title_anchor is not None:
+     title = str(title_anchor["title"])
+    else:
+      title = str(title.string)
+  else:
+    title = None
   # Find Company
   company = html.find("span", {"class": "company"})
   if company:
@@ -47,7 +55,7 @@ def extract_job(html):
 def extract_jobs(last_pages):
   jobs = []
   for page in range(last_pages):
-    print(f"Scrapping page {page}")
+    print(f"Scrapping Indeed: Page: {page}")
     result = requests.get(f"{URL}&start={0*LIMIT}")
     soup = BeautifulSoup(result.text, 'html.parser')
     results = soup.find_all("div", {"class" : "jobsearch-SerpJobCard"})
@@ -58,5 +66,5 @@ def extract_jobs(last_pages):
 
 def get_jobs():
   last_page = get_last_page()
-  jobs = extract_jobs(last_page)
+  jobs = extract_jobs(2)
   return jobs
