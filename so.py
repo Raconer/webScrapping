@@ -12,7 +12,6 @@ def get_last_page():
 
 def extract_job(html):
   title = html.find("div", {"class":"grid--cell fl1"}).find("h2").find("a")["title"]
-  
   company, location = html.find("h3", {"class":"fc-black-700"}).find_all("span", recursive=False)# recursive=False : 첫째 단계의 span만 가져온다.
   # Get Company
   company = company.get_text(strip=True)
@@ -43,4 +42,4 @@ def get_jobs():
   last_page = get_last_page()
   jobs = extract_jobs(last_page)
   
-  return None
+  return jobs
